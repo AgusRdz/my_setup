@@ -1,0 +1,20 @@
+[user]
+	name = Agustin Espinoza
+	email = agustinurdz_@hotmail.com
+[core]
+	editor = vim
+	ui = true
+	autoclrf = input
+	status = auto
+	branch = auto
+	interactive = auto
+	diff = auto
+	excludesfile = ~/.gitignore
+[push]
+	default = upstream
+[help]
+	autocorrect = 1
+[color]
+	ui = auto
+[pull]
+	ff = only

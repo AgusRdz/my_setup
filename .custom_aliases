@@ -1,0 +1,170 @@
+#! /bin/bash
+ERROR='\033[0;31m'
+WARNING='\033[1;33m'
+SRC='src'
+
+function rcomponent() {
+  # https://www.computerhope.com/unix/bash/getopts.htm
+  # https://gist.github.com/rosterloh/1bff516dfcdd8573fde0
+  if [ -z $1 ]
+  then
+    echo -e "${ERROR}You need specify the component name!"
+  else
+    if [[ -d $SRC ]]
+    then
+      if [[ -d "${SRC}/components/${1}" ]]
+      then
+        echo -e "${WARNING}${1} component already exists!"
+      else
+        CURRENT_DIRECTORY=$(pwd)
+        cd "${SRC}/components" && mkdir $1 && cd $1
+        touch index.js $1.js $1.test.js
+        printf "export { default } from './"${1}"'\n" >> index.js
+        cd $CURRENT_DIRECTORY
+      fi
+    else
+      echo -e "${ERROR}${SRC} directory does not exists"
+    fi
+  fi
+}
+
+function rpage() {
+  if [ -z $1 ]
+  then
+    echo -e "${ERROR}You need specify the page name!"
+  else
+    if [[ -d $SRC ]]
+    then
+      if [[ -d "${SRC}/pages/${1}" ]]
+      then
+        echo -e "${WARNING}${1} page already exists!"
+      else
+        CURRENT_DIRECTORY=$(pwd)
+        cd "${SRC}/pages" && mkdir $1 && cd $1
+        touch index.js $1.js $1.test.js
+        printf "export { default } from './"${1}"'\n" >> index.js
+        cd $CURRENT_DIRECTORY
+      fi
+    else
+      echo -e "${ERROR}${SRC} directory does not exists"
+    fi
+  fi
+}
+
+function nestedComponent(){
+  mkdir $1 && cd $1 && touch index.js $1.js && $1.test.js && cd ..
+}
+
+function e_zsh() {
+  vim ~/.zshrc
+}
+
+function r_zsh() {
+  source ~/.zshrc
+}
+
+function feature() {
+  git checkout -b "feature/"$1
+}
+
+function hotfix() {
+  git checkout -b "hotfix/"$1
+}
+
+function bug() {
+  git checkout -b "bug/"$1
+}
+
+function ys() {
+  if [[ -d "node_modules" ]] then
+    yarn start
+  else
+    yarn && yarn start
+  fi
+}
+
+function ns() {
+  if [[ -d "/node_modules" ]] then
+    npm run start
+  else
+    npm install && npm run start
+  fi
+}
+
+alias pg_start='brew services start postgresql@9.6'
+alias pg_stop='brew services stop postgresql@9.6'
+alias clone='git clone $@'
+alias develop='git checkout develop'
+alias development='git checkout development'
+alias master='git checkout master'
+# alias main='git checkout main'
+alias here='git rev-parse --abbrev-ref HEAD && git rev-parse --abbrev-ref HEAD | pbcopy'
+alias commit='git commit -m $@'
+alias delete='git branch -D $@'
+alias undo='git reset --soft HEAD^'
+alias amend_msg='git commit --amend -m $@'
+alias amend_date='git commit --amend --date "$(date -R)" --no-edit'
+alias amend_files='git commit --amend --no-edit'
+alias amend_author='git commit --amend --reset-author --no-edit'
+alias change='git checkout $@'
+alias status='git status'
+alias logtree='git log --graph --oneline --decorate --all'
+alias log='git log'
+alias pull='git pull'
+alias push='git push -u origin $(git rev-parse --abbrev-ref HEAD)'
+alias tc='git rev-list --count $(git rev-parse --abbrev-ref HEAD)'
+alias branch='git checkout -b $@'
+alias feature='feature'
+alias bug='bug'
+alias merge='git merge $@'
+alias rebase='git rebase $@'
+alias add='git add $@'
+alias rename='git branch -m $@'
+alias diff='git diff $@'
+alias stash='git stash'
+alias drop_stash='git stash drop $@'
+alias stash_file='git stash push -m $@ $@'
+alias pop='git stash pop'
+alias checkout='git checkout $@'
+alias pick='git cherry-pick $@'
+alias standup='git standup -d $@'
+alias lease='git push --force-with-lease'
+alias commited='git diff-tree --no-commit-id --name-only -r $(git rev-parse --short HEAD)'
+alias clean_repo='git branch | grep -v "release/" | grep -v "master" | xargs git branch -D'
+alias c='clear'
+alias r='reset'
+alias h='cd ~/'
+alias phpunit='vendor/phpunit/phpunit/phpunit $@'
+alias dusk='php artisan dusk $@'
+alias artisan='php artisan $@'
+alias fresh='php artisan migrate:fresh --seed'
+alias tinker='php artisan tinker'
+alias migrate='php artisan migrate'
+alias rollback='php artisan migrate:rollback'
+alias refresh='php artisan migrate:refresh'
+alias seed='php artisan db:seed'
+alias dev='git checkout release/dev'
+alias rc='rcomponent'
+alias brvengrok='cd ~/ngrok && ./ngrok start brandverge'
+alias yb='yarn build && terminal-notifier -message "App Built!" -title "😎
+ Ready 🚀" -sound default'
+alias eca='vim ~/.custom_aliases'
+alias ys=ys
+alias yb='yarn build'
+alias yl='yarn lint'
+alias yp='yarn prettier'
+alias yt='yarn test'
+alias yan='yarn add $@'
+alias yad='yarn add -D $@'
+alias ns=ns
+alias nb='npm run build'
+alias nl='npm run lint'
+alias np='npm run prettier'
+alias nt='npm run test'
+alias nin='npm install $@'
+alias nid='npm install --save-dev $@'
+alias mysql_start='brew services start mysql@5.7'
+alias mysql_stop='brew services stop mysql@5.7'
+alias apache_start='sudo apachectl start'
+alias apache_stop='sudo apachectl stop'
+alias ngrok='cd ~/ngrok && ./ngrok $@'
